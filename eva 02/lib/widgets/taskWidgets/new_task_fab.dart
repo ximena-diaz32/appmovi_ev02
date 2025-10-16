@@ -3,50 +3,51 @@ import 'package:flutter/material.dart';
 
 class NewTaskFab extends StatelessWidget {
   const NewTaskFab({
-    super.key,                                                      // Key opcional para identificar el widget en el árbol
-    required this.onSubmit,                                         // Callback requerido: recibe (title, note, due)
-    this.onCreated,                                                 // Callback opcional tras crear (p. ej., mostrar SnackBar)
-    this.labelText = '',                                            // Texto por defecto del FAB
-    this.icon = Icons.add,                                          // Ícono por defecto del FAB
+    super.key,
+    required this.onSubmit,
+    this.onCreated,
+    this.labelText = '',
+    this.icon = Icons.add,
   });
 
-  final void Function(String title, String? note, DateTime? due)
-  onSubmit;                                                          // Define parámetros a propagar
-  final void Function(BuildContext context)?
-  onCreated;                                                         // Callback opcional ejecutado si el sheet retorna éxito
-  final String labelText;                                            // Texto visible en el FAB
-  final IconData icon;                                               // Ícono visible en el FAB
+  final void Function(String title, String? note, DateTime? due) onSubmit;
+  final void Function(BuildContext context)? onCreated;
+  final String labelText;
+  final IconData icon;
 
-  @override                                                          // Sobrescribe el método build para construir el widget
-
-  Widget build(BuildContext context) {                               // Botón flotante con ícono y texto
+  @override
+  Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      icon: Icon(icon),                                              // Icono del botón
-      label: Text(labelText),                                        // Etiqueta del botón
-      onPressed: () async {                                          // Acción al presionar
-        final created = await showModalBottomSheet(                  // Muestra un modal inferior y espera el resultado
-          context: context,
+      icon: Icon(icon),
+      label: Text(labelText),
+      onPressed: () async {
+        final localContext = context; // Captura el contexto antes del await
+
+        final created = await showModalBottomSheet<bool>(
+          context: localContext,
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),
-          builder: (ctx) => Padding(                                   // Contenido con márgenes
+          builder: (ctx) => Padding(
             padding: EdgeInsets.only(
               left: 16,
               right: 16,
               top: 12,
               bottom: 16 + MediaQuery.of(ctx).viewInsets.bottom,
             ),
-            child: NewTaskSheet(                                       // Formulario de nueva tarea
-              onSubmit: (title, note, due) {                           // Al enviar el formulario
-                onSubmit(title, note, due);                            // Ejecuta función externa
-                Navigator.pop(ctx, true);                              // Cierra el modal con resultado
+            child: NewTaskSheet(
+              onSubmit: (title, note, due) {
+                onSubmit(title, note, due);
+                Navigator.pop(ctx, true);
               },
             ),
           ),
         );
-        if ((created ?? false) && onCreated != null) {                 // Si se creó la tarea y hay función de post-creación, se ejecuta
-          onCreated!(context);
+
+        // Verifica si el widget sigue montado antes de usar el contexto
+        if ((created ?? false) && onCreated != null && localContext.mounted) {
+          onCreated!(localContext);
         }
       },
     );

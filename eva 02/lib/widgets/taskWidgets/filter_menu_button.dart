@@ -1,29 +1,36 @@
-import 'package:app_tareas/models/task_filter.dart';
 import 'package:flutter/material.dart';
+import 'package:app_tareas/models/task_filter.dart';
+import 'package:app_tareas/models/task_filter_config.dart';
 
-class FilterMenuButton extends StatelessWidget {                                  // Menu pop up de filtrado                   
+class FilterMenuButton extends StatelessWidget {
   const FilterMenuButton({
     super.key,
     required this.value,
     required this.onChanged,
   });
 
-  final TaskFilter value;
-  final ValueChanged<TaskFilter> onChanged;
+  final TaskFilterConfig value;
+  final ValueChanged<TaskFilterConfig> onChanged;
 
   @override
   Widget build(BuildContext context) {
+    final isAsc = value.ascending;
+
     return PopupMenuButton<TaskFilter>(
-      tooltip: "Filtro",
-      initialValue: value,
-      onSelected: onChanged,
+      tooltip: "Ordenar por fecha",
+      initialValue: isAsc ? TaskFilter.dateAsc : TaskFilter.dateDesc,
+      onSelected: (selected) {
+        final ascending = selected == TaskFilter.dateAsc;
+        onChanged(value.copyWith(ascending: ascending));
+      },
       itemBuilder: (_) => const [
-        PopupMenuItem(value: TaskFilter.all, child: Text("Todas")),                // Opción todas  
-        PopupMenuItem(value: TaskFilter.pending, child: Text("Pendientes")),       // Opción Pendientes
-        PopupMenuItem(value: TaskFilter.done, child: Text("Completada")),          // Opción Complatadas
-        PopupMenuItem(value: TaskFilter.overdueNotDone, child: Text("Vencidas")),  // Opción vencidas no rendidas
+        PopupMenuItem(value: TaskFilter.dateAsc, child: Text("Fecha Ascendente")),
+        PopupMenuItem(value: TaskFilter.dateDesc, child: Text("Fecha Descendente")),
       ],
-      icon: const Icon(Icons.filter_list),
+      icon: Transform.rotate(
+        angle: isAsc ? 3.1416 : 0,
+        child: const Icon(Icons.filter_list),
+      ),
     );
   }
 }

@@ -43,7 +43,7 @@ class _LoginFieldsState extends State<LoginFields> {
     });
 
     try {
-      await Future.delayed(const Duration(milliseconds: 8000));              // Simula una llamada de red (auth).
+      await Future.delayed(const Duration(milliseconds: 1500));              // Simula una llamada de red (auth).
 
       if (!mounted) return;                                                  // Seguridad: evita usar context si el widget se removió.
       Navigator.of(context).pushReplacement(                                 // Reemplaza la pantalla actual por la de Tareas.

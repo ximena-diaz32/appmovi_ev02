@@ -1,5 +1,6 @@
-import 'package:app_tareas/models/task_filter.dart';
 import 'package:flutter/material.dart';
+import 'package:app_tareas/models/task_filter.dart';
+import 'package:app_tareas/models/task_filter_config.dart';
 
 class FilterChipsRow extends StatelessWidget {
   const FilterChipsRow({
@@ -9,22 +10,26 @@ class FilterChipsRow extends StatelessWidget {
     this.color,
   });
 
-  final TaskFilter value;
-  final ValueChanged<TaskFilter> onChanged;
+  final TaskFilterConfig value;
+  final ValueChanged<TaskFilterConfig> onChanged;
   final Color? color;
 
   @override
-  Widget build(BuildContext context) {                                   // Widget de pesañas de filtrado
+  Widget build(BuildContext context) {
     final active = color ?? Theme.of(context).colorScheme.primary;
+
     ChoiceChip chip(String label, TaskFilter filter) => ChoiceChip(
       label: Text(
         label,
-        style: TextStyle(color: value == filter ? Colors.white : const Color.fromARGB(255, 31, 115,117)), 
-                                                                        // Color de pestaña activa
+        style: TextStyle(
+          color: value.stateFilter == filter
+              ? Colors.white
+              : const Color.fromARGB(255, 31, 115, 117),
+        ),
       ),
-      selected: value == filter,
+      selected: value.stateFilter == filter,
       selectedColor: active,
-      onSelected: (_) => onChanged(filter),
+      onSelected: (_) => onChanged(value.copyWith(stateFilter: filter)),
     );
 
     return Padding(
@@ -32,10 +37,10 @@ class FilterChipsRow extends StatelessWidget {
       child: Wrap(
         spacing: 0,
         children: [
-          chip("Todas", TaskFilter.all),                                // Pestaña Todas
-          chip("Pendientes", TaskFilter.pending),                       // Pestaña Pendientes
-          chip("Completada", TaskFilter.done),                          // Pestaña Completada
-          chip("Vencidas", TaskFilter.overdueNotDone),                  // Pestaña Vencidas no rendidas
+          chip("Pendientes", TaskFilter.pending),
+          chip("Completadas", TaskFilter.done),
+          chip("Vencidas", TaskFilter.overdueNotDone),
+          chip("Todas", TaskFilter.all),
         ],
       ),
     );

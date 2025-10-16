@@ -51,7 +51,7 @@ class TaskCard extends StatelessWidget {                                        
                     const Icon(Icons.grade, size: 16, color: Colors.orange),
                     const SizedBox(width: 6),
                     Text(
-                      'Evaluación: ${task.valuation!.toStringAsFixed(1)}',
+                      'Calificación: ${task.valuation!.toStringAsFixed(1)}',
                       style: const TextStyle(color: Colors.blueGrey),
                     ),
                   ],

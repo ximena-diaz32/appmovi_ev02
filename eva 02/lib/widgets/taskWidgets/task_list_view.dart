@@ -2,46 +2,104 @@ import 'package:app_tareas/models/task.dart';
 import 'package:app_tareas/widgets/taskWidgets/task_card.dart';
 import 'package:flutter/material.dart';
 
-class TaskListView extends StatelessWidget {                                        // Lista de evaluaciones
+class TaskListView extends StatefulWidget {
   const TaskListView({
     super.key,
-    required this.items,                                                            // Lista de evaluaciones
-    required this.onToggle,                                                         // Función al cambiar el estado de la evaluación      
-    required this.onDelete,                                                         // Función al eliminar la evaluación           
-    required this.dateFormatter,                                                    // Función para formatear la fecha
-    required this.swipeColor,                                                       // Color del swipe  
-    this.empty,                                                                     // Widget a mostrar si la lista está vacía  
-    this.itemKeyOf,                                                                 // Función para obtener la llave del item (opcional)   
+    required this.items,
+    required this.onToggle,
+    required this.onDelete,
+    required this.dateFormatter,
+    required this.swipeColor,
+    this.empty,
+    this.itemKeyOf,
+    this.highlight,
   });
 
-  final List<Task> items;                                                          // Lista de evaluaciones     
-  final void Function(Task task, bool done) onToggle;                              // Función al cambiar el estado de la evaluación
-  final void Function(Task task) onDelete;                                         // Función al eliminar la evaluación
-  final String Function(DateTime) dateFormatter;                                   // Función para formatear la fecha
-  final Color swipeColor;                                                          // Color del swipe
+  final List<Task> items;
+  final void Function(Task task, bool done) onToggle;
+  final void Function(Task task) onDelete;
+  final String Function(DateTime) dateFormatter;
+  final Color swipeColor;
+  final Task? highlight;
 
-  final Widget? empty;                                                             // Widget a mostrar si la lista está vacía              
+  final Widget? empty;
+  final Object? Function(Task task)? itemKeyOf;
 
-  final Object? Function(Task task)? itemKeyOf;                                    // Función para obtener la llave del item (opcional)        
+  @override
+  State<TaskListView> createState() => _TaskListViewState();
+}
 
-  @override                                                                        // Sobrescribe el método build para construir el widget
+class _TaskListViewState extends State<TaskListView>
+    with TickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<Offset> _offsetAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _offsetAnimation = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+  }
+
+  @override
+  void didUpdateWidget(covariant TaskListView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.highlight != null && widget.highlight != oldWidget.highlight) {
+      _controller.forward(from: 0.0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (items.isEmpty) return empty ?? const SizedBox.shrink();                   // Si la lista está vacía, mostrar el widget vacío o un SizedBox  
+    if (widget.items.isEmpty) return widget.empty ?? const SizedBox.shrink();
 
-    return ListView.separated(                                                    // Lista separada de evaluaciones
+    return ListView.separated(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 96),
       separatorBuilder: (_, _) => const SizedBox(height: 4),
-      itemCount: items.length,
-      itemBuilder: (_, i) {
-        final task = items[i];
-        return TaskCard(                
+      itemCount: widget.items.length,
+      itemBuilder: (context, i) {
+        final task = widget.items[i];
+        final isHighlighted = task == widget.highlight;
+
+        final content = TaskCard(
           task: task,
-          itemKey: itemKeyOf?.call(task),
-          dateText: task.due != null ? dateFormatter(task.due!) : null,             // Formatear la fecha si existe
-          onToggle: (v) => onToggle(task, v),
-          onDismissed: () => onDelete(task),
-          swipeColor: swipeColor,
+          itemKey: widget.itemKeyOf?.call(task),
+          dateText: task.due != null ? widget.dateFormatter(task.due!) : null,
+          onToggle: (v) => widget.onToggle(task, v),
+          onDismissed: () => widget.onDelete(task),
+          swipeColor: widget.swipeColor,
         );
+
+        if (isHighlighted) {
+          return SlideTransition(
+            position: _offsetAnimation,
+            child: AnimatedOpacity(
+              opacity: 1.0,
+              duration: const Duration(milliseconds: 500),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 31, 115, 117,), // Color de fondo del highlight
+                 
+                ),
+                child: content,
+              ),
+            ),
+          );
+        }
+
+        return content;
       },
     );
   }

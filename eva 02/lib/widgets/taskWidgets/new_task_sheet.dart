@@ -116,26 +116,7 @@ class _NewTaskSheetState extends State<NewTaskSheet> {              // Estado de
                 (v == null || v.trim().isEmpty) ? 'Ingrese una Evaluación' : null,
           ),
           const SizedBox(height: 12),
-
-          TextFormField(                                             // Campo para ingresar la calificación
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
-              labelText: 'Calificación (Opcional)',              // Etiqueta visible
-              hintText: 'Ej: 7.0' ,                              // Texto de ayuda
-              prefixIcon: Icon(Icons.grade),                     // Ícono relacionado con calificaciones
-              border: OutlineInputBorder(),
-              filled: true,
-                ),
-              keyboardType: TextInputType.number,                      // Teclado numérico
-              validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Ingrese una calificación';
-                    final value = double.tryParse(v);
-                    if (value == null || value < 1 || value > 7) return 'Debe estar entre 1.0 y 7.0';
-                    return null;
-            },
-          ),
-          const SizedBox(height: 12),
-          
+        
           TextFormField(                                             // Campo para ingresar notas opcionales
             controller: _noteCtrl,                                   // Conecta al controlador de notas
             focusNode: _noteFocus,
