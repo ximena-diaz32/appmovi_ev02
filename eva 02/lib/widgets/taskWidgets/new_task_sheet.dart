@@ -47,9 +47,9 @@ class _NewTaskSheetState extends State<NewTaskSheet> {              // Estado de
     _due = widget.initialDue;
   }
 
-  Future<void> _pickDueDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
+  Future<void> _pickDueDate() async {                                // Función para seleccionar la fecha de vencimiento     
+    final now = DateTime.now();                                      // Fecha actual
+    final picked = await showDatePicker(                             // Muestra el selector de fecha
       context: context,
       initialDate: _due ?? now,
       firstDate: DateTime(now.year, now.month, now.day),
@@ -60,14 +60,14 @@ class _NewTaskSheetState extends State<NewTaskSheet> {              // Estado de
     );
     if (picked != null) {
       setState(() {
-        _due = DateTime(picked.year, picked.month, picked.day, 23, 59);
+        _due = DateTime(picked.year, picked.month, picked.day, 23, 59);   // Establece la fecha seleccionada a las 23:59 del día elegido
       });
     }
   }
 
   @override
   void dispose() {                                                  // Libera la memoria de los controladores cuando se destruye el widget
-    _titleCtrl.dispose(); 
+    _titleCtrl.dispose();                                         
     _noteCtrl.dispose();
     _noteFocus.dispose(); 
     _titleFocus.dispose(); 
@@ -132,31 +132,31 @@ class _NewTaskSheetState extends State<NewTaskSheet> {              // Estado de
           ),
           const SizedBox(height: 16),
 
-          InkWell(
+          InkWell(                                                  // Campo interactivo para seleccionar la fecha de vencimiento
             onTap: _pickDueDate,
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),    
             child: InputDecorator(
-              decoration: const InputDecoration(
+              decoration: const InputDecoration(                    // Decoración del campo            
                 labelText: "Fecha de Rendición (Opcional)",
                 border: OutlineInputBorder(),
                 filled: true,
               ),
-              child: Row(
+              child: Row(                                           // Fila con icono, fecha y botones
                 children: [
                   const Icon(Icons.event),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
+                    child: Text(                                    // Muestra la fecha seleccionada o "Sin Fecha"
                       _due == null ? "Sin Fecha" : formatShortDate(_due!),
                     ),
                   ),
                   if (_due != null)
-                    TextButton.icon(
+                    TextButton.icon(                                // Botón para quitar la fecha seleccionada                 
                       onPressed: () => setState(() => _due = null),
                       icon: const Icon(Icons.close),
                       label: const Text("Quitar"),
                     ),
-                  TextButton.icon(
+                  TextButton.icon(                                  // Botón para elegir o cambiar la fecha de vencimiento
                     onPressed: _pickDueDate,
                     icon: const Icon(Icons.edit_calendar),
                     label: Text(_due == null ? "Elegir" : "Cambiar"),
@@ -176,7 +176,7 @@ class _NewTaskSheetState extends State<NewTaskSheet> {              // Estado de
                   onPrimary: Colors.white,                          // Color del texto e ícono
                 ),
               ),
-              child: FilledButton.icon(
+              child: FilledButton.icon(                               // Botón principal para enviar el formulario             
                 onPressed: _submit,
                 icon: const Icon(Icons.check),
                 label: Text(widget.submitLabel),

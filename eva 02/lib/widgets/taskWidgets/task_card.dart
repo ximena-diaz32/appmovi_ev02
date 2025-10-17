@@ -25,12 +25,12 @@ class TaskCard extends StatelessWidget {                                        
     final k = itemKey ?? '${task.title}-${task.hashCode}';
     return Dismissible(
       key: ValueKey(k),
-      background: SwipeBg(alineacion: Alignment.centerLeft, color: swipeColor),
+      background: SwipeBg(alineacion: Alignment.centerLeft, color: swipeColor),      // Fondo al deslizar
       secondaryBackground: SwipeBg(
         alineacion: Alignment.centerRight,
         color: swipeColor,
       ),
-      onDismissed: (_) => onDismissed(),
+      onDismissed: (_) => onDismissed(),                                             // Llamar a la función al eliminar la evaluación             
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         child: CheckboxListTile(
@@ -39,24 +39,12 @@ class TaskCard extends StatelessWidget {                                        
           title: Text(
             task.title,
             style: TextStyle(
-              decoration: task.done ? TextDecoration.lineThrough : null,
+              decoration: task.done ? TextDecoration.lineThrough : null,              // Tachado si está completada
             ),
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (task.valuation != null)                                             // Evaluación sobre nota
-                Row(
-                  children: [
-                    const Icon(Icons.grade, size: 16, color: Colors.orange),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Calificación: ${task.valuation!.toStringAsFixed(1)}',
-                      style: const TextStyle(color: Colors.blueGrey),
-                    ),
-                  ],
-                ),
-
               if (task.note != null && task.note!.isNotEmpty)                         // Nota de la evaluación
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
@@ -76,7 +64,7 @@ class TaskCard extends StatelessWidget {                                        
                 ),
             ],
           ),
-          controlAffinity: ListTileControlAffinity.leading,
+          controlAffinity: ListTileControlAffinity.leading,                           // Checkbox a la izquierda               
           secondary: const Icon(Icons.drag_handle),
         ),
       ),

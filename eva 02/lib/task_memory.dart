@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TaskMemory extends StatelessWidget {
   const TaskMemory({super.key});
 
-  @override                                                                                                     // Método que construye el widget
+  @override                                                                                                    // Método que construye el widget
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(

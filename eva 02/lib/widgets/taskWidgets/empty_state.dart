@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class EmptyState extends StatelessWidget {
+class EmptyState extends StatelessWidget {                                      // Widget de estado vacío
   const EmptyState({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {                                  
     // WIdget de estado vacio
     return Center(
       child: Padding(
@@ -15,16 +15,16 @@ class EmptyState extends StatelessWidget {
             Icon(
               Icons.checklist_rtl,
               size: 64,
-              color: const Color.fromARGB(255, 31, 115, 117),
+              color: const Color.fromARGB(255, 31, 115, 117),                 // Icono representativo
             ),
             SizedBox(height: 12),
             Text(
-              "No hay Evaluaciones", // Mensaje sino hay evaluaciones
+              "No hay Evaluaciones",                                            // Mensaje sino hay evaluaciones
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 8),
             Text(
-              "Agregue sus evaluaciones desde el botón + Agendar", // Mensaje de instruccion para ingresar evaluaciones
+              "Agregue sus evaluaciones desde el botón + Agendar",              // Mensaje de instruccion para ingresar evaluaciones
               textAlign: TextAlign.center,
             ),
           ],

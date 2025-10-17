@@ -1,1 +1,1 @@
-enum TaskFilter { all, pending, done, overdueNotDone, dateAsc, dateDesc, } 
+enum TaskFilter { all, pending, done, overdueNotDone, dateAsc, dateDesc, }  /// Filtros de tareas disponibles

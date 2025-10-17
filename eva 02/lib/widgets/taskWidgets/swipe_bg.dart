@@ -11,14 +11,14 @@ class SwipeBg extends StatelessWidget {                                       //
     return Container(
       alignment: alineacion,                                                  // Alineacion
       padding: const EdgeInsets.symmetric(horizontal: 16),                    // Tamaño Fuente
-      color: color,                                         // Color
+      color: color,                                                           // Color
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(Icons.delete_outlined, color: Colors.white), 
           SizedBox(width: 8),
           Text(
-            "ELIMINAR",                                       // Texto del swipe
+            "ELIMINAR",                                                       // Texto del swipe
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
           ),
         ],
