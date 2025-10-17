@@ -31,7 +31,8 @@ class _SearchFieldState extends State<SearchField> {
       child: TextField(
         controller: _controller,                                      // Controlador del campo de texto
         focusNode: _focusNode,                                        // Nodo de foco
-        onSubmitted: _handleSubmitted,                                // Ejecuta la función al presionar "Buscar"
+        onChanged: widget.onChanged,                                  // Función al cambiar el texto
+        onSubmitted: _handleSubmitted,                                // Función al enviar el texto                              
         textInputAction: TextInputAction.search,                      // Acción del teclado
         decoration: const InputDecoration(
           hintText: "Buscar Evaluaciones...",                         // Texto de sugerencia en el campo
