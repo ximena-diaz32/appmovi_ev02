@@ -57,10 +57,13 @@ class _TaskScreenState extends State<TaskScreen> {                              
           floatingActionButton: NewTaskFab(                                               //AppBar // Botón flotante para nueva evaluación                           
             onSubmit: (title, note, due) =>
                 _ctrl.add(title, note: note, due: due),
-            onCreated: (ctx) => ScaffoldMessenger.of(ctx).showSnackBar(
-              const SnackBar(content: Text("EVALUACIÓN AGENDADA")),                       // Mensaje al crear una nueva evaluación
-            ),
-          ),
+            onCreated: (ctx) => {ScaffoldMessenger.of(ctx).showSnackBar(
+              const SnackBar(duration: Duration(milliseconds: 2500),                      // Duración del SnackBar
+              backgroundColor: Color.fromARGB(255, 31, 115, 117),                       // Color de fondo del SnackBar
+                content: Text("EVALUACIÓN AGENDADA",                                      // Mensaje al crear una nueva evaluación
+                  textAlign: TextAlign.center,                                            // Centrar el texto
+                    style: TextStyle(color: Colors.white, fontSize: 18)),),),
+             FocusScope.of(ctx).unfocus()}),                                              // Ocultar el teclado al enviar  
           body: SafeArea(                                                                 // Área segura para el contenido principal
             child: Column(
               children: [
